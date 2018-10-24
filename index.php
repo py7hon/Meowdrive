@@ -73,8 +73,8 @@ function changeTags(){
         <div class="container">
             <div class="row">
                 <div class="about-heading">
-			      <iframe src="https://tetora.webs.vc/player?id=<?php echo $original_id;?>" frameborder="0" width="480" height="240"></iframe>
                     <h2><?php echo new_title('https://drive.google.com/file/d/' . $original_id . '/view'); ?></h2>
+			<iframe src="https://tetora.webs.vc/player?id=<?php echo $original_id;?>" frameborder="0" width="480" height="240"></iframe>
                     <p><form method="post" action="">
                         <input type="hidden" name="asdf" value="<?php echo $gid;?>">
                         <button class="download" onClick="changeTags(); return false;">DOWNLOAD</button>
