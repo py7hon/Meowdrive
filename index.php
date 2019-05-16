@@ -1,22 +1,20 @@
 <?php
 error_reporting(0);
 include "curl_gd.php";
-
-
-
 if($_GET['id'] != ""){
 	$gid = $_GET['id'];
 	$original_id = my_simple_crypt($gid, 'd');
 	$title = fetch_value(file_get_contents_curl('https://drive.google.com/get_video_info?docid='.$original_id), "title=", "&");
-	$url = 'https://drive.google.com/file/d/'.$original_id.'/view';
-	$linkdown = Drive($url);
-	$test = fetch_value(new_title($fs));
-}
-
-?>
+}if($_POST['asdf']){
+	$id = $_POST['asdf'];
+	$original_id = my_simple_crypt($id, 'd');
+	$url = "https://apighost.herokuapp.com/api/gddirect/$original_id";
+	$json = file_get_contents($url);
+	$json_data = json_decode($json, true);
+	$link = $json_data['src'];
+	echo "<meta http-equiv='refresh' content='0;url=$link'>";}?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -31,11 +29,6 @@ if($_GET['id'] != ""){
       <script src="js/html5shiv.js"></script>
       <script src="js/respond.min.js"></script>
     <![endif]-->
-    <script type='text/javascript'>
-function changeTags(){
-   $("head").append('<meta http-equiv="refresh" content="0;url=<?php echo $linkdown;?>">');
-}
-</script>
 </head>
 <body>
     <header class="top-header">
@@ -73,11 +66,11 @@ function changeTags(){
         <div class="container">
             <div class="row">
                 <div class="about-heading">
+			      <iframe src="https://tetora.webs.vc/player?id=<?php echo $original_id;?>" frameborder="0" width="480" height="240"></iframe>
                     <h2><?php echo new_title('https://drive.google.com/file/d/' . $original_id . '/view'); ?></h2>
-			<!--<iframe src="https://tetora.webs.vc/player?id=<?php //echo $original_id;?>" frameborder="0" width="480" height="240"></iframe>-->
                     <p><form method="post" action="">
                         <input type="hidden" name="asdf" value="<?php echo $gid;?>">
-                        <button class="download" onClick="changeTags(); return false;">DOWNLOAD</button>
+                        <button class="download">DOWNLOAD</button>
                         </form></p>
                 </div>
                  <div class="recom">
