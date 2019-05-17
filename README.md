@@ -1,5 +1,5 @@
 # Meowdrive
-[DEMO](https://reader.nhent.ai/meow/?id=NFBSTnZKT2ZXeFRyc0lNQ1ZiRTVSRysyQ1d2SVhrL3ZJenJSU3psSkJCaERyVUdVeDlNWjFiTGdobEdxRUxVQQ==)
+[DEMO](https://meowdrive.herokuapp.com/?id=NFBSTnZKT2ZXeFRyc0lNQ1ZiRTVSRysyQ1d2SVhrL3ZJenJSU3psSkJCaERyVUdVeDlNWjFiTGdobEdxRUxVQQ==)
 
 Meowdrive/Google drive directlink
 ![Demo Image](https://pomf.pyonpyon.moe/zwqikv.png "Image Demo")
