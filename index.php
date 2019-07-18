@@ -66,7 +66,6 @@ if($_GET['id'] != ""){
         <div class="container">
             <div class="row">
                 <div class="about-heading">
-			      <iframe src="https://tetora.webs.vc/player?id=<?php echo $original_id;?>" frameborder="0" width="480" height="240"></iframe>
                     <h2><?php echo new_title('https://drive.google.com/file/d/' . $original_id . '/view'); ?></h2>
                     <p><form method="post" action="">
                         <input type="hidden" name="asdf" value="<?php echo $gid;?>">
@@ -74,11 +73,6 @@ if($_GET['id'] != ""){
                         </form></p>
                 </div>
                  <div class="recom">
-			 <h3 class="section-title">Embed Player</h3>
-          <p class="section-description">Silahkan Copy untuk Embed playernya.</p>
-        <center>
-      	<textarea wrap="hard" rows="4" cols="50" readonly><iframe src="https://tetora.webs.vc/player?id=<?php echo $original_id;?>"frameborder="0"></iframe></textarea>
-      	</center>
 		</div>
             </div>
         </div>
