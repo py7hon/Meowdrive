@@ -8,7 +8,7 @@ if($_GET['id'] != ""){
 }if($_POST['asdf']){
 	$id = $_POST['asdf'];
 	$original_id = my_simple_crypt($id, 'd');
-	$url = "https://apighost.herokuapp.com/api/gddirect/$original_id";
+	$url = "https://cord-cinema.glitch.me/drive/$original_id";
 	$json = file_get_contents($url);
 	$json_data = json_decode($json, true);
 	$link = $json_data['src'];
