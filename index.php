@@ -1,18 +1,57 @@
 <?php
-error_reporting(0);
-include "curl_gd.php";
+function my_simple_crypt( $string, $action = 'e' ) {
+  	$secret_key = 'drivekey';
+  	$secret_iv = 'google';
+  	$output = false;
+  	$encrypt_method = "AES-256-CBC";
+  	$key = hash( 'sha256', $secret_key );
+  	$iv = substr( hash( 'sha256', $secret_iv ), 0, 16 );
+  	if( $action == 'e' ) {
+    		$output = base64_encode( openssl_encrypt( $string, $encrypt_method, $key, 0, $iv ) );
+  		}else if( $action == 'd' ){
+    			$output = openssl_decrypt( base64_decode( $string ), $encrypt_method, $key, 0, $iv );
+  	}
+  	return $output;
+}
+function getDownload($id){
+		$ch = curl_init("https://drive.google.com/uc?id=$id&authuser=0&export=download");
+		curl_setopt_array($ch, array(
+			CURLOPT_CUSTOMREQUEST => 'POST',
+			CURLOPT_SSL_VERIFYPEER => false,
+			CURLOPT_POSTFIELDS => [],
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_ENCODING => 'gzip,deflate',
+			CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4,
+			CURLOPT_HTTPHEADER => [
+				'accept-encoding: gzip, deflate, br',
+				'content-length: 0',
+				'content-type: application/x-www-form-urlencoded;charset=UTF-8',
+				'origin: https://drive.google.com',
+				'user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
+				'x-client-data: CKG1yQEIkbbJAQiitskBCMS2yQEIqZ3KAQioo8oBGLeYygE=',
+				'x-drive-first-party: DriveWebUi',
+				'x-json-requested: true'
+			]
+		));
+		$response = curl_exec($ch);
+		$response_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		curl_close($ch);
+		if($response_code == '200') { // Jika response status OK
+			$object = json_decode(str_replace(')]}\'', '', $response));
+			if(isset($object->downloadUrl)) {
+				return $object->downloadUrl;
+			} 
+		} else {
+			return $response_code;
+		}
+}
 if($_GET['id'] != ""){
 	$gid = $_GET['id'];
 	$original_id = my_simple_crypt($gid, 'd');
-	$title = fetch_value(file_get_contents_curl('https://drive.google.com/get_video_info?docid='.$original_id), "title=", "&");
-}if($_POST['asdf']){
-	$id = $_POST['asdf'];
-	$original_id = my_simple_crypt($id, 'd');
-	$url = "https://cord-cinema.glitch.me/drive/$original_id";
+	$url = "https://www.googleapis.com/drive/v2/files/$original_id?supportsTeamDrives=true&key=AIzaSyBPO_VhHtvTL-gs35Nb24cSsjuxQasjlN0";
 	$json = file_get_contents($url);
 	$json_data = json_decode($json, true);
-	$link = $json_data['src'];
-	echo "<meta http-equiv='refresh' content='0;url=$link'>";}?>
+}?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,7 +59,15 @@ if($_GET['id'] != ""){
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Gdrive Download">
     <meta name="author" content="Iqbal Rifai">
-    <title><?php echo new_title('https://drive.google.com/file/d/' . $original_id . '/view'); ?> – Meowdrive</title>
+    <?php
+    error_reporting(0);
+    	if($_POST['asdf']){
+		$id = $_POST['asdf'];
+		$original_id = my_simple_crypt($id, 'd');
+		$docsurl = getDownload($original_id);
+		echo "<meta http-equiv='refresh' content='0;url=$docsurl'>\n"; 
+		}?>
+    <title><?php echo $json_data["title"]; ?> – Meowdrive</title>
     <link rel="stylesheet" href="css/font-awesome.min.css">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/style.css">
@@ -66,7 +113,7 @@ if($_GET['id'] != ""){
         <div class="container">
             <div class="row">
                 <div class="about-heading">
-                    <h2><?php echo new_title('https://drive.google.com/file/d/' . $original_id . '/view'); ?></h2>
+                    <h2><?php echo $json_data["title"]; ?></h2>
                     <p><form method="post" action="">
                         <input type="hidden" name="asdf" value="<?php echo $gid;?>">
                         <button class="download">DOWNLOAD</button>
@@ -85,5 +132,4 @@ if($_GET['id'] != ""){
     <script src="js/bootstrap.min.js"></script>
     <script src="js/custom.js"></script>
 </body>
-
 </html>
