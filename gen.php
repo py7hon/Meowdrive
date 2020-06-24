@@ -1,12 +1,22 @@
 <?php
 	error_reporting(0);
-	include "curl_gd.php";
-
+function my_simple_crypt( $string, $action = 'e' ) {
+  $secret_key = 'drivekey';
+  $secret_iv = 'google';
+  $output = false;
+  $encrypt_method = "AES-256-CBC";
+  $key = hash( 'sha256', $secret_key );
+  $iv = substr( hash( 'sha256', $secret_iv ), 0, 16 );
+  if( $action == 'e' ) {
+    $output = base64_encode( openssl_encrypt( $string, $encrypt_method, $key, 0, $iv ) );
+  }else if( $action == 'd' ){
+    $output = openssl_decrypt( base64_decode( $string ), $encrypt_method, $key, 0, $iv );
+  }
+  return $output;
+}
 	if($_POST['submit'] != ""){
-		$url = $_POST['url'];
-		$gid = get_drive_id($url);
+		$gid = $_POST['url'];
 		$iframeid = my_simple_crypt($gid);
-		$linkdown = Drive($url);
 		$file = '[{"type": "video/mp4", "label": "HD", "file": "'.$linkdown.'"}]';
 	}
 ?>
@@ -19,7 +29,7 @@
 	<style>
 	.info-icon{margin-top:-6px}
 	.navbar-default {background: #fff !important;}
-	body { background: url('https://0wo.me/img/bg2.jpg') no-repeat center center fixed;-webkit-background-size:cover;-moz-background-size:cover;-o-background-size: cover;background-size: cover;}
+	body { background: url('https://i.pixiv.cat/img-original/img/2017/12/20/00/12/19/66360679_p0.png?1564663474077') no-repeat center center fixed;-webkit-background-size:cover;-moz-background-size:cover;-o-background-size: cover;background-size: cover;}
 	.transp {background: rgba(255,255,255,0.5);}
 	.card{ background: rgba(255,255,255,0.9) !important; }
 	</style>
