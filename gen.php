@@ -1,5 +1,21 @@
 <?php
-	error_reporting(0);
+error_reporting(0);
+function getDriveID($url){
+    $filter1 = preg_match('/drive\.google\.com\/open\?id\=(.*)/', $url, $fileid1);
+    $filter2 = preg_match('/drive\.google\.com\/file\/d\/(.*?)\//', $url, $fileid2);
+    $filter3 = preg_match('/drive\.google\.com\/uc\?id\=(.*?)\&/', $url, $fileid3);
+    if ($filter1) {
+        $fileid = $fileid1[1];
+    } else if ($filter2) {
+        $fileid = $fileid2[1];
+    } else if ($filter3) {
+        $fileid = $fileid3[1];
+    } else {
+        $fileid = null;
+    }
+    
+    return ($fileid);
+}
 function my_simple_crypt( $string, $action = 'e' ) {
   $secret_key = 'drivekey';
   $secret_iv = 'google';
@@ -15,9 +31,9 @@ function my_simple_crypt( $string, $action = 'e' ) {
   return $output;
 }
 	if($_POST['submit'] != ""){
-		$gid = $_POST['url'];
+		$url = $_POST['url'];
+		$gid = getDriveID($url);
 		$iframeid = my_simple_crypt($gid);
-		$file = '[{"type": "video/mp4", "label": "HD", "file": "'.$linkdown.'"}]';
 	}
 ?>
 <!doctype html>
@@ -73,8 +89,5 @@ function my_simple_crypt( $string, $action = 'e' ) {
   <section class="footme">
       Google Drive Link Generator <a id="nochange" href="https://fb.me/iqbalrifaii">Iqbal Rifai</a>
   </section>
-
-<!--- 0wo text --->
-<script src="https://0wo.me/0wo.js"></script>
 </body>
 </html>
